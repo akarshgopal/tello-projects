@@ -1,6 +1,7 @@
 # Some fun Projects with Ryze Tello 
 
 ## TODO for Tello Projects
+
 ### Project packaging
 - setup environment
 - setup dependencies for tello sdk, tello py, cv, and dl if needed
@@ -41,7 +42,10 @@
     - video stream
     - CV inference
     - gesture vis
-    - 
+
+### Mobile App
+- Implement features as add-on to Tello App?
+ 
 ### Hack
 - Try and get access to internals of Tello?
 - Get access to low-level controller?
