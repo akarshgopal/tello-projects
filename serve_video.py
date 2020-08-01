@@ -31,8 +31,8 @@ def detect_motion():
 			"%A %d %B %Y %I:%M:%S%p"), (10, frame.shape[0] - 10),
 			cv2.FONT_HERSHEY_SIMPLEX, 0.35, (0, 0, 255), 1)
 
-        with lock:
-            outputFrame = frame.copy()
+		with lock:
+			outputFrame = frame.copy()
 
 def generate():
 	# grab global references to the output frame and lock variables
@@ -41,13 +41,16 @@ def generate():
 	while True:
 		# wait until the lock is acquired
 		with lock:
+			# check if the output frame is available, otherwise skip
+			# the iteration of the loop
 			if outputFrame is None:
 				continue
-
+			# encode the frame in JPEG format
 			(flag, encodedImage) = cv2.imencode(".jpg", outputFrame)
+			# ensure the frame was successfully encoded
 			if not flag:
 				continue
-
+		# yield the output frame in the byte format
 		yield(b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + 
 			bytearray(encodedImage) + b'\r\n')
 
@@ -66,6 +69,8 @@ if __name__ == '__main__':
 		help="ip address of the device")
 	ap.add_argument("-o", "--port", type=int, required=True,
 		help="ephemeral port number of the server (1024 to 65535)")
+	ap.add_argument("-f", "--frame-count", type=int, default=32,
+		help="# of frames used to construct the background model")
 	args = vars(ap.parse_args())
 	# start a thread that will perform motion detection
 	t = threading.Thread(target=detect_motion)

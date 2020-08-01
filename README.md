@@ -18,7 +18,7 @@
     - <strike>figure out how to access video stream with tellopy</strike>
     - HUD
         - <strike>figure out how to access state info with tellopy </strike>
-        - overlay on video (cv2.putText())
+        - <strike>overlay on video (cv2.putText())</strike>
     - <strike>display video on browser using opencv + Flask </strike>
     - get it to work over docker
 
@@ -28,7 +28,7 @@
         - get raw IMU data using MPU6050 w 
             -Raspberry Pi (multi sensor readings)
             -<strike>Arduino</strike>
-    - bridge pi/arduino over to tello
+    - <strike>bridge pi/arduino over to tello</strike>
     - linear acc + quaternion commands from IMU to tello commands
 
 - Algos ~ 5 hrs
