@@ -2,25 +2,34 @@
 
 ## TODO for Tello Projects
 
-### Project packaging ~ 3 hrs
+### Project packaging ~ 6 hrs
 - setup environment
 - setup CI/CD
 - <strike>setup git(hub)</strike>
 - prep requirements file, environment file
 - package into docker image?
+- documentation
 
 ### General Comms ~ 2 hrs
 - <strike> establish UDP connection to tello </strike>
-- send key commands via UDP
+- <strike>send key commands via UDP</strike>
+    - <strike>perform two way comms using tellopy</strike>
 - stream video over connection
+    - <strike>figure out how to access video stream with tellopy</strike>
+    - HUD
+        - <strike>figure out how to access state info with tellopy </strike>
+        - overlay on video (cv2.putText())
+    - <strike>display video on browser using opencv + Flask </strike>
+    - get it to work over docker
 
-### Hand-Motion Control ~ 5hrs
-- Comms ~ 2 hrs
+### Hand-Motion Control ~ 10hrs
+- Comms ~ 5 hrs
     - IMU + Raspberry pi/ Arduino
+        - get raw IMU data using MPU6050 w Raspberry Pi /Arduino
     - bridge pi/arduino over to tello
     - linear acc + quaternion commands from IMU to tello commands
 
-- Algos ~ 3 hrs
+- Algos ~ 5 hrs
     - State estimation and Parameter estimation
         - Kalman Filter
         - Sensor selection
