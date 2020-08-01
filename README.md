@@ -25,7 +25,9 @@
 ### Hand-Motion Control ~ 10hrs
 - Comms ~ 5 hrs
     - IMU + Raspberry pi/ Arduino
-        - get raw IMU data using MPU6050 w Raspberry Pi /Arduino
+        - get raw IMU data using MPU6050 w 
+            -Raspberry Pi (multi sensor readings)
+            -<strike>Arduino</strike>
     - bridge pi/arduino over to tello
     - linear acc + quaternion commands from IMU to tello commands
 
