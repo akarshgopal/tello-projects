@@ -1,5 +1,20 @@
 # Some fun Projects with Ryze Tello 
 
+Goal is to learn ROS, practice sensor fusion, comms and implement Computer vision.
+
+## Tello-IMU control:
+- MPU 6050
+- Arduino Uno
+- Ubuntu w Tellopy
+
+## Tello CV:
+- Open-pose for pose recognition
+- Tello control based on pose recognition
+
+## Tello SLAM:
+- Visual Inertial SLAM using ROS and Tello
+
+
 ## TODO for Tello Projects
 
 ### Project packaging ~ 6 hrs
@@ -24,12 +39,13 @@
 
 ### Hand-Motion Control ~ 10hrs
 - Comms ~ 5 hrs
-    - IMU + Raspberry pi/ Arduino
-        - get raw IMU data using MPU6050 w 
-            -Raspberry Pi (multi sensor readings)
-            -<strike>Arduino</strike>
-    - <strike>bridge pi/arduino over to tello</strike>
-    - linear acc + quaternion commands from IMU to tello commands
+    - Hardware Abstraction Layer
+        - IMU + Raspberry pi/ Arduino
+            - get raw IMU data using MPU6050 w 
+                -Raspberry Pi (multi sensor readings)
+                -<strike>Arduino</strike>
+        - <strike>bridge pi/arduino over to tello</strike>
+        - linear acc + quaternion commands from IMU to tello commands
 
 - Algos ~ 5 hrs
     - State estimation and Parameter estimation
