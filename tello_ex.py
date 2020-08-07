@@ -29,7 +29,8 @@ from subprocess import Popen, PIPE
 import serial
 import numpy as np
 
-import mpu6050 as mpu
+import utils.mpu6050 as mpu
+from utils.imu_control import control_with_imu_pose
 # from tellopy import logger
 
 # log = tellopy.logger.Logger('TelloUI')
@@ -214,50 +215,6 @@ def handleFileReceived(event, sender, data):
         fd.write(data)
     status_print('Saved photo to %s' % path)
 
-def control_with_imu_pose(drone,orientation,acc):
-    '''
-    Commands tello based on z position (altitude)
-    z_acc > 9.81 -> move up
-    z_acc <9.81 -> move down
-    pitch down -> move forward
-    pitch up -> move backward
-    roll left -> move left
-    roll right -> move right
-    yaw -> yaw
-    '''
-    '''
-    if acc[2]>3: 
-        drone.up(10)
-        print("moving up")
-    elif acc[2]<-3:
-        drone.down(10)
-        print("moving down")
-    '''
-    if orientation[2]>20:
-        drone.left(30)
-        print("moving left")
-    elif orientation[2]<-20:
-        drone.right(30)
-        print("moving right")
-    
-    if orientation[1]>20:
-        drone.forward(30)
-        print("moving forward")
-    elif orientation[1]<-20:
-        drone.backward(30)
-        print("moving back")
-
-    # For IMU-only yaw estimates, expect drift.
-    # So just command yaw based on    
-    if orientation[0]>10:
-        drone.clockwise(60)
-        print("rotating cw")
-    elif orientation[0]<-10:
-        drone.counter_clockwise(60)
-        print("rotating ccw")
-    return None
-
-
 def main():
     pygame.init()
     pygame.display.init()
@@ -280,20 +237,12 @@ def main():
     drone.subscribe(drone.EVENT_FILE_RECEIVED, handleFileReceived)
     speed = 30
 
-    acc_bias = np.array([[0.33645234],[0.03482358],[0.20295396]])
-    gyr_bias = np.array([[-0.03619743],[ 0.03796374],[ 0.00193548]])
-
     try:
         ser = serial.Serial('/dev/ttyACM0',9600)
         while 1:
-            #print('while')
             time.sleep(0.01)  # loop with pygame.event.get() is too mush tight w/o some sleep
             start = time.time()
             orientation, acc = mpu.get_mpu_dmp_vals(ser)
-            #print('got vals')
-            #acc, gyr = mpu.get_mpu_vals(ser)            
-            #acc=  acc - acc_bias - np.array([[0],[0],[9.81]])
-            #gyr=  gyr - gyr_bias
 
             for e in pygame.event.get():
                 # WASD for movement
@@ -319,7 +268,9 @@ def main():
                             getattr(drone, key_handler)(0)
                         else:
                             key_handler(drone, 0)
-            control_with_imu_pose(drone,orientation,acc)
+                
+            #run imu-based control
+            control_with_imu_pose(drone,orientation,acc)            
             
     except e:
         print(str(e))

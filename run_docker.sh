@@ -1,4 +1,8 @@
 xhost +
+
+## mounts pwd to docker container
+## uses X-server for display passthrough
+
 sudo docker run --rm -it --net=host  \
    --privileged \
    -e DISPLAY=$DISPLAY \

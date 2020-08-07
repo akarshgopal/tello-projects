@@ -33,17 +33,12 @@ def get_mpu_dmp_vals(ser):
     return orientation, acc
 
 if __name__=="__main__":
-    vel = np.zeros([3,1])
-    pos = np.zeros([3,1])
-    ori = np.zeros([3,1])
     try:
         ser = serial.Serial(PORT,BAUDRATE)
-
         while 1:
             start = time.time()
             orientation, acc = get_mpu_dmp_vals(ser)
             print("\nAcceleration:",(acc).T,"\nOrientation (ypr):",(orientation).T)
-            print("\nPosition:",pos.T,"\nOrientation:",ori.T,"\nVelocity:",vel.T,end='\r')
 
     except serial.serialutil.SerialException:
         print("No serial connection detected!")

@@ -30,9 +30,3 @@ RUN pip3 install pygame
 # for web-streaming
 RUN pip3 install flask
 RUN pip3 install imutils
-
-# Copy the rest of your app's source code from your host to your image filesystem.
-# COPY . .
-
-# Run hellopy controller
-# CMD ["python3","./hallopy/hallo.py"]

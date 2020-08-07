@@ -15,7 +15,17 @@ End Product should be a Docker Img, packages:
 ## Tello SLAM:
 - Visual Inertial SLAM using ROS and Tello
 
+## Dependencies:
+- Arduino
+    i2cdevlib
+- Python
+    -see requirements.txt
+    -
 
+## hardware:
+- MPU6050
+- Arduino compatible microcontrollers. (Tested on Uno)
+- DJI/Ryze Tello
 ## TODO for Tello Projects
 
 ### Project packaging ~ 6 hrs
