@@ -1,7 +1,6 @@
 def control_with_imu_pose(drone,orientation,acc):
     '''
-    Simple on-off / P controller based on IMU orientation,
-    and drone state.
+    Simple on-off controller based on IMU orientation.
     
     arguments:
         drone: tellopy drone object
@@ -31,21 +30,15 @@ def control_with_imu_pose(drone,orientation,acc):
         drone.backward(0)
 
     # For IMU-only yaw estimates, expect drift.
-    # So just command yaw based on difference in imu yaw
-    
-    # get Tello yaw
-    tello_yaw = 
-    # get IMU yaw
-    imu_yaw = orientation[0]
+    # Might be better to command yaw based on difference in imu yaw
+    # but access to tello yaw is annoyingly hard rn.
+    # could store yaw offset occasionally?
 
-    # P controller for yaw: Kp = 1
-    # have a deadzone for yaw control of ~10 deg
-    e = imu_yaw - tello_yaw
-    if e>10:
-        drone.clockwise(e)
+    if orientation[0]>20:
+        drone.clockwise(30)
         print("rotating cw")
-    elif e<-10:
-        drone.counter_clockwise(e)
+    elif orientation[0]<-20:
+        drone.counter_clockwise(30)
         print("rotating ccw")
     else:
         drone.clockwise(0)

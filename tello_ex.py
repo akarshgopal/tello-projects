@@ -144,7 +144,7 @@ def flight_data_mode(drone, *args):
     return (drone.zoom and "VID" or "PIC")
 
 def flight_data_recording(*args):
-    return (video_recorder and "REC 00:00" or "")  # TODO: duration of recording
+    return (video_recorder and "REC 00:00" or "") 
 
 def update_hud(hud, drone, flight_data):
     (w,h) = (158,0) # width available on side of screen in 4:3 mode
@@ -183,6 +183,7 @@ def flightDataHandler(event, sender, data):
         update_hud(hud, sender, data)
         prev_flight_data = text
 
+
 def videoFrameHandler(event, sender, data):
     global video_player
     global video_recorder
@@ -215,6 +216,18 @@ def handleFileReceived(event, sender, data):
         fd.write(data)
     status_print('Saved photo to %s' % path)
 
+# https://github.com/hanyazou/TelloPy/issues/72#issuecomment-622739634
+sensors = None
+def logDataHandler(event, sender, data):
+    global sensors
+    sensors = data
+
+def quaternion2yaw(q0,q1,q2,q3):
+    siny = 2.0*(q0*q3+q1*q2)
+    cosy = 1.0-2.0*(q2*q2+q3*q3)
+    return np.atan2(siny,cosy)
+
+
 def main():
     pygame.init()
     pygame.display.init()
@@ -223,7 +236,7 @@ def main():
 
     global font
     font = pygame.font.SysFont("dejavusansmono", 32)
-
+    tello_yaw=0
     global wid
     if 'window' in pygame.display.get_wm_info():
         wid = pygame.display.get_wm_info()['window']
@@ -235,6 +248,7 @@ def main():
     drone.subscribe(drone.EVENT_FLIGHT_DATA, flightDataHandler)
     drone.subscribe(drone.EVENT_VIDEO_FRAME, videoFrameHandler)
     drone.subscribe(drone.EVENT_FILE_RECEIVED, handleFileReceived)
+
     speed = 30
 
     try:
@@ -243,6 +257,14 @@ def main():
             time.sleep(0.01)  # loop with pygame.event.get() is too mush tight w/o some sleep
             start = time.time()
             orientation, acc = mpu.get_mpu_dmp_vals(ser)
+            if sensors:
+                print(sensors)
+            #tello_yaw = quaternion2yaw(
+            #    sensors.imu.q0,
+            #    sensors.imu.q1,
+            #    sensors.imu.q2,
+            #    sensors.imu.q3)
+            #print(tello_yaw)
 
             for e in pygame.event.get():
                 # WASD for movement
@@ -278,6 +300,7 @@ def main():
         print('Shutting down connection to drone...')
         if video_recorder:
             toggle_recording(drone, 1)
+        drone.land()
         drone.quit()
         exit(1)
 
