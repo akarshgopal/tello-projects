@@ -4,89 +4,51 @@ Goal is to learn ROS, practice sensor fusion, comms and implement Computer visio
 End Product should be a Docker Img, packages:
 
 ## Tello-IMU control:
-- MPU 6050
+- Invensense MPU 6050
 - Arduino Uno
 - Ubuntu w Tellopy
 
+## Hardware:
+- MPU6050
+- Arduino compatible microcontrollers. (Tested on Uno)
+- DJI/Ryze Tello
+
+## Dependencies:
+- Arduino
+    i2cdevlib
+
+## Installation
+- Install Arduino I2Cdevlib
+- 
+
+## Docker Installation
+#### Build Docker image
+```
+chmod +x build_docker.sh
+./build_docker.sh
+```
+#### Accessing serial on container:
+For more info, look [here](https://www.losant.com/blog/how-to-access-serial-devices-in-docker)
+- Create the following file 
+    ```
+    sudo nano /etc/udev/rules.d/99-serial.rules
+    ```
+- Add the following line:
+    ```
+    KERNEL=="ttyUSB[0-9]*",MODE="0666"
+    ```
+- Save and exit
+
+#### Run Docker container
+```
+chmod +x run_docker.sh
+./run_docker.sh
+```
+
+# WIP
 ## Tello CV:
 - Open-pose for pose recognition
 - Tello control based on pose recognition
 
 ## Tello SLAM:
 - Visual Inertial SLAM using ROS and Tello
-
-## Dependencies:
-- Arduino
-    i2cdevlib
-- Python
-    -see requirements.txt
-    -
-
-## hardware:
-- MPU6050
-- Arduino compatible microcontrollers. (Tested on Uno)
-- DJI/Ryze Tello
-## TODO for Tello Projects
-
-### Project packaging ~ 6 hrs
-- setup environment
-- setup CI/CD
-- <strike>setup git(hub)</strike>
-- prep requirements file, environment file
-- package into docker image?
-- documentation
-
-### General Comms ~ 2 hrs
-- <strike> establish UDP connection to tello </strike>
-- <strike>send key commands via UDP</strike>
-    - <strike>perform two way comms using tellopy</strike>
-- stream video over connection
-    - <strike>figure out how to access video stream with tellopy</strike>
-    - HUD
-        - <strike>figure out how to access state info with tellopy </strike>
-        - <strike>overlay on video (cv2.putText())</strike>
-    - <strike>display video on browser using opencv + Flask </strike>
-    - get it to work over docker
-
-### Utils
-- <strike>Need a simple on-off control for imu</strike>
-- 
-
-### CV based Control ~ 10 hrs
-- establish a CV pipeline
-    - get img/vid stream -> run model inference -> visualise output + return command
-    - move to more complicated CV
-
-### Visual + Inertial SLAM ~ 25 hrs
-- establish a SLAM pipeline
-    - get img/vid stream + IMU state -> run SLAM algo -> visualize 
-    - move to more complicated SLAM
-    - integrate with ROS - learn ROS and related stuff
-
-### Web-App ~ 5 hrs
-- Implement features in browser?
-    - video stream
-    - CV inference
-    - gesture vis
-
-### Mobile App ~ 20 hrs
-- Implement features as add-on to Tello App?
-    - Combine IMU based + CV based control + VI SLAM   
-
-### Hack
-- Try and get access to internals of Tello?
-- Get access to low-level controller?
-
-
-Accessing serial on container:
-
-Create the following file 
-```
-sudo nano /etc/udev/rules.d/99-serial.rules
-```
-Add the following line:
-```
-KERNEL=="ttyUSB[0-9]*",MODE="0666"
-```
-Save and exit
-
