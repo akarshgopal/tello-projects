@@ -5,7 +5,7 @@ import time
 PORT = '/dev/ttyACM0'
 BAUDRATE = 9600
 
-def get_mpu_vals(ser):
+def get_mpu_raw_vals(ser):
     '''
     Reads raw mpu acc and gyr values via serial input from arduino
     converts values to float and returns acc,gyr readings in metric system.
@@ -79,6 +79,32 @@ def calibrate_gyr():
     print("Calibrated gyr! bias:",bias,"\n noise:", noise)   
     return bias,noise
     
+def get_mpu_dmp_vals(ser):
+    '''
+    Reads mpu6050 DMP values from arduino's serial output 
+    and returns the values as numpy arrays for uses in python.
+
+    Args:
+        ser: Serial object
+    Returns:
+        acc: 3-tuple of x,y,z acc values in m/s/s
+        gyr: 3-tuple of x,y,z gyr values in rad/s
+    '''
+    orientation = np.zeros([3,1])
+    acc = np.zeros([3,1])
+    mpu_bytestring = ser.readline()
+
+    try:
+        mpu_utfstring = mpu_bytestring.decode("utf-8")
+        mpu_dmp = [float(i) for i in mpu_utfstring[0:-2].split(",")]
+        if len(mpu_dmp)<6:
+            return orientation, acc
+        orientation = np.array([mpu_dmp[0:3]]).T
+        acc = np.array([mpu_dmp[3:6]]).T
+    except ValueError:
+        print("Value Error!")
+        pass
+    return orientation, acc
 
 acc_bias = np.array([[0.33645234],[0.03482358],[0.20295396]])
 gyr_bias = np.array([[-0.03619743],[ 0.03796374],[ 0.00193548]])
@@ -94,75 +120,25 @@ if __name__=="__main__":
     
         while 1:
             start = time.time()
-            acc, gyr = get_mpu_vals(ser)
+            orientation, acc = get_mpu_dmp_vals(ser)
+            print("\nAcceleration:",(acc).T,"\nOrientation (ypr):",(orientation).T)
+            print("\nPosition:",pos.T,"\nOrientation:",ori.T,"\nVelocity:",vel.T,end='\r')
+            # acc, gyr = get_mpu_raw_vals(ser)
             
-            acc1=  acc - acc_bias - np.array([[0],[0],[9.81]])
-            gyr1 = gyr - gyr_bias
-            del_t = time.time() - start
+            #acc1=  acc - acc_bias - np.array([[0],[0],[9.81]])
+            #gyr1 = gyr - gyr_bias
+            #del_t = time.time() - start
 
-            vel += acc1*del_t
-            pos += vel*del_t
-            ori += gyr1*del_t
+            #vel += acc1*del_t
+            #pos += vel*del_t
+            #ori += gyr1*del_t
 
             #print(del_t)
-            print("\nAcceleration w/o bias:",(acc1).T,"\nGyro w/o bias:",(gyr1).T)
-            print("\nPosition:",pos.T,"\nOrientation:",ori.T,"\nVelocity:",vel.T,end='\r')
-    
+            #print("\nAcceleration w/o bias:",(acc1).T,"\nGyro w/o bias:",(gyr1).T)
+            #print("\nPosition:",pos.T,"\nOrientation:",ori.T,"\nVelocity:",vel.T,end='\r')
+
+
     except serial.serialutil.SerialException:
         print("No serial connection detected!")
         quit()
 
-'''
-X = [x
-    y
-    z
-    
-    q1
-    q2
-    q3
-    q4
-    
-    vx
-    vy
-    vz
-    
-    p
-    q
-    r    ]
-
-U = [ ax
-      ay
-      az
-      alphax
-      alphay
-      alphaz
-]
-
-Xdot = AX + BU + w
-y = CX + v
-
-Cx
-Cp
-Cv
-
-KF:
-
-zhat = CX
-zbar = Cx - z
-S = CSC.T + Cv
-K = Cx C.T S-1
-X = X - Kzbar
-Cx = Cx - KSK.T
-
-X = AX + BU
-Cx = ACxA.T + Cp
-'''
-
-# Need to determine acc, gyr bias for MPU
-
-
-# Need to determine Cv for MPU, A,B,C, Cx,Cp for application
-
-# gyr: rms noise :[0.05] deg/s
-# acc: 
-#

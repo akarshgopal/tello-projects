@@ -214,7 +214,7 @@ def handleFileReceived(event, sender, data):
         fd.write(data)
     status_print('Saved photo to %s' % path)
 
-def control_with_imu_pose(drone,acc,gyr):
+def control_with_imu_pose(drone,orientation,acc):
     '''
     Commands tello based on z position (altitude)
     z_acc > 9.81 -> move up
@@ -232,24 +232,25 @@ def control_with_imu_pose(drone,acc,gyr):
     elif acc[2]<-3:
         drone.down(10)
         print("moving down")
-    if gyr[0]>1:
+    '''
+    if orientation[2]>20:
         drone.left(30)
         print("moving left")
-    elif gyr[0]<-1:
+    elif orientation[2]<-20:
         drone.right(30)
         print("moving right")
-    if gyr[1]<-1:
+    
+    if orientation[1]>20:
         drone.forward(30)
         print("moving forward")
-    elif gyr[1]>1:
+    elif orientation[1]<-20:
         drone.backward(30)
         print("moving back")
-    '''
-    if gyr[2]<-1:
-        drone.clockwise(30)
+    if orientation[0]>10:
+        drone.clockwise(60)
         print("rotating cw")
-    elif gyr[2]>1:
-        drone.counter_clockwise(30)
+    elif orientation[0]<-10:
+        drone.counter_clockwise(60)
         print("rotating ccw")
     return None
 
@@ -282,11 +283,14 @@ def main():
     try:
         ser = serial.Serial('/dev/ttyACM0',9600)
         while 1:
+            #print('while')
             time.sleep(0.01)  # loop with pygame.event.get() is too mush tight w/o some sleep
             start = time.time()
-            acc, gyr = mpu.get_mpu_vals(ser)            
-            acc=  acc - acc_bias - np.array([[0],[0],[9.81]])
-            gyr=  gyr - gyr_bias
+            orientation, acc = mpu.get_mpu_dmp_vals(ser)
+            #print('got vals')
+            #acc, gyr = mpu.get_mpu_vals(ser)            
+            #acc=  acc - acc_bias - np.array([[0],[0],[9.81]])
+            #gyr=  gyr - gyr_bias
 
             for e in pygame.event.get():
                 # WASD for movement
@@ -312,7 +316,7 @@ def main():
                             getattr(drone, key_handler)(0)
                         else:
                             key_handler(drone, 0)
-            control_with_imu_pose(drone,acc,gyr)
+            control_with_imu_pose(drone,orientation,acc)
             
     except e:
         print(str(e))

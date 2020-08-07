@@ -1,6 +1,7 @@
 # Some fun Projects with Ryze Tello 
 
 Goal is to learn ROS, practice sensor fusion, comms and implement Computer vision.
+End Product should be a Docker Img, packages:
 
 ## Tello-IMU control:
 - MPU 6050
@@ -48,9 +49,7 @@ Goal is to learn ROS, practice sensor fusion, comms and implement Computer visio
         - linear acc + quaternion commands from IMU to tello commands
 
 - Algos ~ 5 hrs
-    - State estimation and Parameter estimation
-        - Kalman Filter
-        - Sensor selection
+    - Sensor Fusion for Orientation
 
 ### CV based Control ~ 10 hrs
 - establish a CV pipeline
