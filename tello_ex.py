@@ -246,6 +246,9 @@ def control_with_imu_pose(drone,orientation,acc):
     elif orientation[1]<-20:
         drone.backward(30)
         print("moving back")
+
+    # For IMU-only yaw estimates, expect drift.
+    # So just command yaw based on    
     if orientation[0]>10:
         drone.clockwise(60)
         print("rotating cw")

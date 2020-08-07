@@ -38,19 +38,9 @@ End Product should be a Docker Img, packages:
     - <strike>display video on browser using opencv + Flask </strike>
     - get it to work over docker
 
-### Hand-Motion Control ~ 10hrs
-- Comms ~ 5 hrs
-    - Hardware Abstraction Layer
-        - IMU + Raspberry pi/ Arduino
-            - get raw IMU data using MPU6050 w 
-                -Raspberry Pi (multi sensor readings)
-                -<strike>Arduino</strike>
-        - <strike>bridge pi/arduino over to tello</strike>
-        - linear acc + quaternion commands from IMU to tello commands
-
-- Algos ~ 5 hrs
-    - Sensor Fusion for Orientation
-
+### Utils
+- Need a simple P-control 
+- 
 ### CV based Control ~ 10 hrs
 - establish a CV pipeline
     - get img/vid stream -> run model inference -> visualise output + return command
