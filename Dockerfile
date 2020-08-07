@@ -27,6 +27,9 @@ RUN pip3 install tellopy
 RUN apt-get install -y mplayer 
 RUN pip3 install pygame
 
+# for arduino
+RUN pip3 install pyserial
+
 # for web-streaming
 RUN pip3 install flask
 RUN pip3 install imutils

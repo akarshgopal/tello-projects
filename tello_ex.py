@@ -252,7 +252,9 @@ def main():
     speed = 30
 
     try:
+        print("trying to connect to arduino")
         ser = serial.Serial('/dev/ttyACM0',9600)
+        print("connected!")
         while 1:
             time.sleep(0.01)  # loop with pygame.event.get() is too mush tight w/o some sleep
             start = time.time()

@@ -49,8 +49,9 @@ End Product should be a Docker Img, packages:
     - get it to work over docker
 
 ### Utils
-- Need a simple P-control 
+- <strike>Need a simple on-off control for imu</strike>
 - 
+
 ### CV based Control ~ 10 hrs
 - establish a CV pipeline
     - get img/vid stream -> run model inference -> visualise output + return command
@@ -75,3 +76,17 @@ End Product should be a Docker Img, packages:
 ### Hack
 - Try and get access to internals of Tello?
 - Get access to low-level controller?
+
+
+Accessing serial on container:
+
+Create the following file 
+```
+sudo nano /etc/udev/rules.d/99-serial.rules
+```
+Add the following line:
+```
+KERNEL=="ttyUSB[0-9]*",MODE="0666"
+```
+Save and exit
+
