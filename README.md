@@ -1,7 +1,7 @@
 # Some fun Projects with Ryze Tello 
 
 Goal is to learn ROS, practice sensor fusion, comms and implement Computer vision.
-End Product should be a Docker Img, packages:
+End Product should be a Docker Img / ROS packages:
 
 ## Tello-IMU control:
 - Invensense MPU 6050
@@ -17,11 +17,13 @@ End Product should be a Docker Img, packages:
 - Arduino
     i2cdevlib
 
+- CV
+    Openpose
+
 ## Installation
 - Install Arduino I2Cdevlib
-- 
 
-## Docker Installation
+### Docker Installation
 #### Build Docker image
 ```
 chmod +x build_docker.sh
