@@ -1,1 +1,1 @@
-docker build -t tello_app .
+docker build -t tello-app:openpose .

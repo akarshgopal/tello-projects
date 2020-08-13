@@ -62,7 +62,6 @@ RUN pip3 install flask
 RUN pip3 install imutils
 
 # install latest version of cmake to avoid make issue
-
 RUN apt purge -y --auto-remove cmake
 RUN apt purge -y cmake-qt-gui
 RUN apt-get -y --no-install-recommends install qtbase5-dev
@@ -75,14 +74,15 @@ RUN cd cmake-3.18.1 && \
 RUN cd cmake-3.18.1 && \
     ./bootstrap && make -j`nproc` && make install -j`nproc`
 
-
+# -DBUILD_PYTHON=ON in order to turn on python api build
 RUN echo "Downloading and building OpenPose..." && \
 	git clone https://github.com/CMU-Perceptual-Computing-Lab/openpose.git && \
 	mkdir -p /openpose/build && \
 	cd /openpose/build && \
-	cmake .. && \
+	cmake -DBUILD_PYTHON=ON .. && \
 	make -j`nproc`
     
+RUN pip3 install simple-pid
 
 # Set the working directory
 WORKDIR /usr/src/app
